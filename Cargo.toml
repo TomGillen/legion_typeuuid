@@ -1,0 +1,19 @@
+[package]
+name = "legion_typeuuid"
+version = "0.1.0"
+authors = ["Thomas Gillen <thomas.gillen@googlemail.com>"]
+edition = "2018"
+
+[features]
+default = ["type-uuid", "collect"]
+collect = ["inventory"]
+
+[dependencies]
+legion = { git="https://github.com/TomGillen/legion" }
+uuid = "0.8"
+serde = { version = "1.0", features = ["derive"] }
+inventory = { version = "0.1", optional = true }
+type-uuid = { version = "0.1", optional = true }
+
+[dev-dependencies]
+serde_json = "1.0"
