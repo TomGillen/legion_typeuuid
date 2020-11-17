@@ -9,7 +9,7 @@
 //! # use legion_typeuuid::*;
 //! # #[derive(serde::Serialize, serde::Deserialize)]
 //! # struct Position;
-//! let mut registry = Registry::new();
+//! let mut registry = Registry::default();
 //! let uuid = SerializableTypeUuid::parse_str("1d97d71a-76bf-41d1-94c3-fcaac8231f12");
 //! registry.register::<Position>(uuid);
 //! ```
@@ -30,7 +30,7 @@
 //! #[uuid = "1d97d71a-76bf-41d1-94c3-fcaac8231f12"]
 //! struct Position;
 //!
-//! let mut registry = Registry::<SerializableTypeUuid>::new();
+//! let mut registry = Registry::<SerializableTypeUuid>::default();
 //! registry.register_auto_mapped::<Position>();
 //! # }
 //! ```
@@ -120,7 +120,7 @@ mod collect {
     /// Constructs a `Registry` which is pre-loaded with all types which have been
     /// registered with the `register_serialize` macro.
     pub fn collect_registry() -> Registry<SerializableTypeUuid> {
-        let mut registry = Registry::new();
+        let mut registry = Registry::default();
         for registration in inventory::iter::<TypeUuidRegistration> {
             (registration.builder)(&mut registry);
         }
