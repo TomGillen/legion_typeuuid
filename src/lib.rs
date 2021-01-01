@@ -9,8 +9,8 @@
 //! # use legion_typeuuid::*;
 //! # #[derive(serde::Serialize, serde::Deserialize)]
 //! # struct Position;
-//! let mut registry = Registry::default();
-//! let uuid = SerializableTypeUuid::parse_str("1d97d71a-76bf-41d1-94c3-fcaac8231f12");
+//! let mut registry = Registry::<SerializableTypeUuid>::default();
+//! let uuid = SerializableTypeUuid::parse_str("1d97d71a-76bf-41d1-94c3-fcaac8231f12").unwrap();
 //! registry.register::<Position>(uuid);
 //! ```
 //!
@@ -241,8 +241,7 @@ mod tests {
         use super::*;
         use legion::*;
 
-        let universe = Universe::new();
-        let mut world = universe.create_world();
+        let mut world = World::default();
 
         let entity = world.extend(vec![
             (1usize, false, 1isize),
@@ -257,10 +256,7 @@ mod tests {
         println!("{:#}", json);
 
         use serde::de::DeserializeSeed;
-        let world: World = registry
-            .as_deserialize(&universe)
-            .deserialize(json)
-            .unwrap();
+        let world: World = registry.as_deserialize().deserialize(json).unwrap();
         let entry = world.entry_ref(entity).unwrap();
         assert_eq!(entry.get_component::<usize>().unwrap(), &1usize);
         assert_eq!(entry.get_component::<bool>().unwrap(), &false);
