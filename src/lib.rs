@@ -203,6 +203,7 @@ mod collect {
     register_serialize_external!(char, "9786a9f4-1195-4dd1-875d-3e469454d9c4");
     register_serialize_external!(String, "7edbc10a-2147-499c-af9a-498723c7b35f");
     register_serialize_external!(std::ffi::CString, "d26a39da-d0e2-46b1-aeab-481fe57d0f23");
+    #[cfg(any(unix, windows))]
     register_serialize_external!(std::ffi::OsString, "38485fce-f5d0-48df-b5cb-98e510c26a8d");
     register_serialize_external!(std::num::NonZeroU8, "284b98ec-ecb5-463c-9744-23b8669c5553");
     register_serialize_external!(std::num::NonZeroU16, "38f030e4-6046-45c9-96b4-1830b1aa3f35");
