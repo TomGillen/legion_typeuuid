@@ -9,8 +9,8 @@
 //! # use legion_typeuuid::*;
 //! # #[derive(serde::Serialize, serde::Deserialize)]
 //! # struct Position;
-//! let mut registry = Registry::default();
-//! let uuid = SerializableTypeUuid::parse_str("1d97d71a-76bf-41d1-94c3-fcaac8231f12");
+//! let mut registry = Registry::<SerializableTypeUuid>::default();
+//! let uuid = SerializableTypeUuid::parse_str("1d97d71a-76bf-41d1-94c3-fcaac8231f12").unwrap();
 //! registry.register::<Position>(uuid);
 //! ```
 //!
@@ -203,6 +203,7 @@ mod collect {
     register_serialize_external!(char, "9786a9f4-1195-4dd1-875d-3e469454d9c4");
     register_serialize_external!(String, "7edbc10a-2147-499c-af9a-498723c7b35f");
     register_serialize_external!(std::ffi::CString, "d26a39da-d0e2-46b1-aeab-481fe57d0f23");
+    #[cfg(any(unix, windows))]
     register_serialize_external!(std::ffi::OsString, "38485fce-f5d0-48df-b5cb-98e510c26a8d");
     register_serialize_external!(std::num::NonZeroU8, "284b98ec-ecb5-463c-9744-23b8669c5553");
     register_serialize_external!(std::num::NonZeroU16, "38f030e4-6046-45c9-96b4-1830b1aa3f35");
@@ -240,8 +241,7 @@ mod tests {
         use super::*;
         use legion::*;
 
-        let universe = Universe::new();
-        let mut world = universe.create_world();
+        let mut world = World::default();
 
         let entity = world.extend(vec![
             (1usize, false, 1isize),
@@ -256,10 +256,7 @@ mod tests {
         println!("{:#}", json);
 
         use serde::de::DeserializeSeed;
-        let world: World = registry
-            .as_deserialize(&universe)
-            .deserialize(json)
-            .unwrap();
+        let world: World = registry.as_deserialize().deserialize(json).unwrap();
         let entry = world.entry_ref(entity).unwrap();
         assert_eq!(entry.get_component::<usize>().unwrap(), &1usize);
         assert_eq!(entry.get_component::<bool>().unwrap(), &false);
